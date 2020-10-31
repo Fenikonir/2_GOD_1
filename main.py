@@ -30,6 +30,7 @@ class MyWidget(QtWidgets.QWidget):
 
     def signal_handler(self, value):
         infoBox = QtWidgets.QMessageBox()  ##Message Box that doesn't run
+        # infoBox.setIcon(QtGui.QIcon("infoBox.png"))
         if value == "Неверный логин или пароль!":
             infoBox.setIcon(QtWidgets.QMessageBox.Warning)
         else:
