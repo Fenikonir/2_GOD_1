@@ -1,0 +1,97 @@
+import sys
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+from check_db import *
+from des import *
+from tester_1 import *
+
+
+class Authorization(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_Form()
+        self.ui.setupUi(self)
+
+        self.ui.pb_registr.clicked.connect(self.regin)
+        self.ui.pb_login.clicked.connect(self.auth)
+        self.base_line_edit = [self.ui.le_login, self.ui.le_password]
+
+        self.check_db = ProverThread()
+        self.check_db.marginal.connect(self.signal_handler)
+
+    def prover_input(funct):
+        def wrapper(self):
+            for line_edit in self.base_line_edit:
+                if len(line_edit.text()) == 0:
+                    return
+            funct(self)
+
+        return wrapper
+
+    def close_aus(self):
+        global ex_test
+        ex_test = Testered()
+        ex_test.show()
+        ex_auth.close()
+
+
+    def signal_handler(self, value):
+        if_log_in = False
+        infoBox = QtWidgets.QMessageBox()  ##Message Box that doesn't run
+        if value == "Неверный логин или пароль!":
+            infoBox.setIcon(QtWidgets.QMessageBox.Critical)
+        elif value == "Авторизация прошла успешно!":
+            infoBox.setIcon(QtWidgets.QMessageBox.Information)
+            if_log_in = True
+        elif value == "Пользователь уже зарегестрирован":
+            infoBox.setIcon(QtWidgets.QMessageBox.Warning)
+        else:
+            infoBox.setIcon(QtWidgets.QMessageBox.Information)
+        infoBox.setText("\n" + value)
+        infoBox.setWindowTitle("Оповещение")
+        infoBox.setEscapeButton(QtWidgets.QMessageBox.Close)
+        infoBox.exec_()
+        if if_log_in:
+            self.close_aus()
+
+    @prover_input
+    def auth(self):
+        name = self.ui.le_login.text()
+        password = self.ui.le_password.text()
+        self.check_db.thr_login(name, password)
+        self.log_auth = name
+
+    @prover_input
+    def regin(self):
+        name = self.ui.le_login.text()
+        password = self.ui.le_password.text()
+        self.check_db.thr_register(name, password)
+
+    def user_info(self):
+        con = sqlite3.connect("handler/users.db")
+        cur = con.cursor()
+        self.result = cur.execute("""SELECT * FROM Users WHERE login=?""", (self.log_auth,)).fetchall()[0]
+        cur.close()
+        con.close()
+
+
+class Testered(QtWidgets.QWidget, Ui_Tester):
+    def __init__(self, parent=None):
+        super(Testered, self).__init__(parent)
+        self.setupUi(self)
+        self.pushButton.clicked.connect(self.start_test)
+
+    def start_test(self):
+        self.comboBox.setEnabled(False)
+        self.setEnabled(False)
+
+
+
+
+
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    ex_auth = Authorization()
+    ex_auth.show()
+
+    sys.exit(app.exec_())

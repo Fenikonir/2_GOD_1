@@ -29,9 +29,11 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
+
+
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Авторизация"))
         self.le_login.setPlaceholderText(_translate("Form", "Логин"))
         self.le_password.setPlaceholderText(_translate("Form", "Пароль"))
         self.pb_login.setText(_translate("Form", "Войти"))

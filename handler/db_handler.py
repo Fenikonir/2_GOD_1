@@ -9,7 +9,9 @@ def login(login, password, signal):
     result = cur.execute("""SELECT * FROM Users WHERE login=?""", (login,)).fetchall()
 
     if result != [] and result[0][2] == password:
+
         signal.emit("Авторизация прошла успешно!")
+
     else:
         signal.emit("Неверный логин или пароль!")
 
