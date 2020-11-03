@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Tester.ui'
+# Form implementation generated from reading ui file 'tester.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.1
 #
@@ -9,28 +9,129 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import db_test_handler
 
 
 class Ui_Tester(object):
-    def setupUi(self, Tester):
-        Tester.setObjectName("Tester")
-        Tester.setWindowIcon(QtGui.QIcon("tester.png"))
-        Tester.setWindowModality(QtCore.Qt.NonModal)
-        Tester.resize(800, 600)
-        self.centralwidget = QtWidgets.QWidget(Tester)
+    def setupUi(self, mainWindow):
+        mainWindow.setObjectName("mainWindow")
+        mainWindow.setWindowIcon(QtGui.QIcon("tester.png"))
+        mainWindow.setWindowModality(QtCore.Qt.NonModal)
+        mainWindow.resize(788, 589)
+        mainWindow.setMinimumSize(QtCore.QSize(788, 589))
+        mainWindow.setMaximumSize(QtCore.QSize(788, 589))
+        self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        # Tester.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(Tester)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 19))
+        self.comboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox.setGeometry(QtCore.QRect(20, 60, 651, 20))
+        self.comboBox.setObjectName("comboBox")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(20, 20, 441, 20))
+        self.label.setStyleSheet("font: 14pt \"Vijaya\";")
+        self.label.setObjectName("label")
+        self.Vibor = QtWidgets.QPushButton(self.centralwidget)
+        self.Vibor.setGeometry(QtCore.QRect(680, 60, 91, 21))
+        self.Vibor.setObjectName("pushButton")
+        self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 500, 751, 51))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.Predidush = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.Predidush.setObjectName("Predidush")
+        self.horizontalLayout.addWidget(self.Predidush)
+        self.Sleduch = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.Sleduch.setObjectName("Sleduch")
+        self.horizontalLayout.addWidget(self.Sleduch)
+        self.Zaverchit = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.Zaverchit.setObjectName("Zaverchit")
+        self.horizontalLayout.addWidget(self.Zaverchit)
+        self.QuestLabel = QtWidgets.QTextBrowser(self.centralwidget)
+        self.QuestLabel.setGeometry(QtCore.QRect(20, 90, 751, 61))
+        self.QuestLabel.setObjectName("QuestLabel")
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 159, 751, 321))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.radioButton_2 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioButton_2.setObjectName("radioButton_2")
+        self.verticalLayout.addWidget(self.radioButton_2)
+        self.radioButton_4 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioButton_4.setObjectName("radioButton_4")
+        self.verticalLayout.addWidget(self.radioButton_4)
+        self.radioButton_5 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioButton_5.setObjectName("radioButton_5")
+        self.verticalLayout.addWidget(self.radioButton_5)
+        self.radioButton_3 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioButton_3.setObjectName("radioButton_3")
+        self.verticalLayout.addWidget(self.radioButton_3)
+        self.radioButton_1 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioButton_1.setObjectName("radioButton_1")
+        self.verticalLayout.addWidget(self.radioButton_1)
+        # mainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(mainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 788, 18))
         self.menubar.setObjectName("menubar")
-        # Tester.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(Tester)
+        # mainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(mainWindow)
         self.statusbar.setObjectName("statusbar")
-        # Tester.setStatusBar(self.statusbar)
+        # mainWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(Tester)
-        QtCore.QMetaObject.connectSlotsByName(Tester)
+        self.retranslateUi(mainWindow)
+        QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
-    def retranslateUi(self, Tester):
+    def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
-        Tester.setWindowTitle(_translate("Tester", "Тестер"))
+        mainWindow.setWindowTitle(_translate("mainWindow", "Тестер"))
+        result = db_test_handler.get_tests()
+        for i in range(len(result)):
+            self.comboBox.addItem("")
+            self.comboBox.setItemText(i, _translate("mainWindow", result[i][1]))
+        # self.comboBox.setItemText(1, _translate("mainWindow", "Тест_2"))
+        self.label.setText(_translate("mainWindow", "Выберите тест:"))
+        self.Vibor.setText(_translate("mainWindow", "Выбрать"))
+        self.Predidush.setText(_translate("mainWindow", "Предыдущий вопрос"))
+        self.Sleduch.setText(_translate("mainWindow", "Следующий вопрос"))
+        self.Zaverchit.setText(_translate("mainWindow", "Завершить"))
+        self.QuestLabel.setHtml(_translate("mainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Вопрос</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">4</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">5</p></body></html>"))
+        self.radioButton_2.setText(_translate("mainWindow", "RadioButton\n"
+"1\n"
+"2\n"
+"3"))
+        self.radioButton_4.setText(_translate("mainWindow", "RadioButton\n"
+"1\n"
+"2\n"
+"3"))
+        self.radioButton_5.setText(_translate("mainWindow", "RadioButton\n"
+"1\n"
+"2\n"
+"3"))
+        self.radioButton_3.setText(_translate("mainWindow", "RadioButton\n"
+"1\n"
+"2\n"
+"3"))
+        self.radioButton_1.setText(_translate("mainWindow", "RadioButton\n"
+"1\n"
+"2\n"
+"3"))
+        self.radioButton_1.setVisible(False)
+        self.radioButton_2.setVisible(False)
+        self.radioButton_3.setVisible(False)
+        self.radioButton_4.setVisible(False)
+        self.radioButton_5.setVisible(False)
+        self.QuestLabel.setReadOnly(True)
+        self.QuestLabel.setVisible(False)
+        self.Predidush.setVisible(False)
+        self.Sleduch.setVisible(False)
+        self.Zaverchit.setVisible(False)

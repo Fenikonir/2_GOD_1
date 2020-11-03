@@ -3,7 +3,7 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from check_db import *
 from des import *
-from tester_1 import *
+from tester import *
 
 
 class Authorization(QtWidgets.QWidget):
@@ -38,6 +38,7 @@ class Authorization(QtWidgets.QWidget):
     def signal_handler(self, value):
         if_log_in = False
         infoBox = QtWidgets.QMessageBox()  ##Message Box that doesn't run
+        infoBox.setWindowIcon(QtGui.QIcon("infoBox.png"))
         if value == "Неверный логин или пароль!":
             infoBox.setIcon(QtWidgets.QMessageBox.Critical)
         elif value == "Авторизация прошла успешно!":
@@ -79,11 +80,75 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
     def __init__(self, parent=None):
         super(Testered, self).__init__(parent)
         self.setupUi(self)
-        self.pushButton.clicked.connect(self.start_test)
+        self.Vibor.clicked.connect(self.start_test)
+        self.Sleduch.clicked.connect(self.sled)
+        self.Predidush.clicked.connect(self.pred)
 
     def start_test(self):
+        self.quest_num = 0
         self.comboBox.setEnabled(False)
-        self.setEnabled(False)
+        self.Vibor.setEnabled(False)
+        self.QuestLabel.setVisible(True)
+        self.Predidush.setVisible(True)
+        self.Sleduch.setVisible(True)
+        self.Zaverchit.setVisible(True)
+        self.set_quest()
+
+    def set_quest(self):
+        x = self.quest_num
+        test = self.comboBox.currentText()
+        questions = db_test_handler.get_guests(test)
+        self.QuestLabel.setText(questions[x][2])
+        if x == 0:
+            self.Predidush.setEnabled(False)
+        else:
+            self.Predidush.setEnabled(True)
+        if x == len(questions) - 1:
+            self.Sleduch.setEnabled(False)
+        else:
+            self.Sleduch.setEnabled(True)
+
+        answers = db_test_handler.get_answer(questions[x][2])
+        self.radioButton_1.setText(answers[0][2])
+        self.radioButton_1.setVisible(True)
+        if len(answers) >= 2:
+            self.radioButton_2.setText(answers[1][2])
+            self.radioButton_2.setVisible(True)
+        if len(answers) >= 3:
+            self.radioButton_3.setText(answers[2][2])
+            self.radioButton_3.setVisible(True)
+        if len(answers) >= 4:
+            self.radioButton_4.setText(answers[3][2])
+            self.radioButton_4.setVisible(True)
+        if len(answers) == 5:
+            self.radioButton_5.setText(answers[4][2])
+            self.radioButton_5.setVisible(True)
+
+
+
+
+    def pred(self):
+        self.quest_num -= 1
+        self.radioButton_1.setVisible(False)
+        self.radioButton_2.setVisible(False)
+        self.radioButton_3.setVisible(False)
+        self.radioButton_4.setVisible(False)
+        self.radioButton_5.setVisible(False)
+        self.set_quest()
+
+    def sled(self):
+        self.quest_num += 1
+        self.radioButton_1.setVisible(False)
+        self.radioButton_2.setVisible(False)
+        self.radioButton_3.setVisible(False)
+        self.radioButton_4.setVisible(False)
+        self.radioButton_5.setVisible(False)
+        self.set_quest()
+
+
+
+
+
 
 
 
