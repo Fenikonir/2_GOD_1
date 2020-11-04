@@ -34,6 +34,10 @@ class Authorization(QtWidgets.QWidget):
         ex_test.show()
         ex_auth.close()
 
+    # def keyPressEvent(self, event):
+    #     if event.key()==QtCore.Qt.Key_Enter:
+    #         self.auth
+
     def signal_handler(self, value):
         if_log_in = False
         infoBox = QtWidgets.QMessageBox()  ##Message Box that doesn't run
@@ -97,7 +101,10 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
     def set_quest(self):
         x = self.quest_num
         test = self.comboBox.currentText()
-        questions = db_test_handler.get_guests(test)
+
+        questions_and_answers = db_test_handler.get_guests_and_answers(test)
+
+        questions = db_test_handler.get_questions(test)
         self.quest = questions[x][2]
         self.QuestLabel.setText(questions[x][2])
         if x == 0:
@@ -109,69 +116,38 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         else:
             self.Sleduch.setEnabled(True)
 
-        self.answers = db_test_handler.get_answer(questions[x][2])
-        self.radioButton_1.setText(self.answers[0][2])
-        self.radioButton_1.setVisible(True)
-        self.radioButton_1.toggled.connect(lambda: self.clik_radio(1))
-        self.rb1 = self.answers[0]
-        if len(self.answers) >= 2:
-            self.radioButton_2.setText(self.answers[1][2])
-            self.radioButton_2.setVisible(True)
-            self.radioButton_2.toggled.connect(lambda: self.clik_radio(2))
-            self.rb2 = self.answers[1]
-        if len(self.answers) >= 3:
-            self.radioButton_3.setText(self.answers[2][2])
-            self.radioButton_3.setVisible(True)
-            self.radioButton_3.toggled.connect(lambda: self.clik_radio(3))
-            self.rb3 = self.answers[2]
-        if len(self.answers) >= 4:
-            self.radioButton_4.setText(self.answers[3][2])
-            self.radioButton_4.setVisible(True)
-            self.radioButton_4.toggled.connect(lambda: self.clik_radio(4))
-            self.rb4 = self.answers[3]
-        if len(self.answers) == 5:
-            self.radioButton_5.setText(self.answers[4][2])
-            self.radioButton_5.setVisible(True)
-            self.radioButton_5.toggled.connect(lambda: self.clik_radio(5))
-            self.rb5 = self.answers[4]
+        self.answers = db_test_handler.get_answers(questions[x][2])
+        for i in range(len(self.answers)):
+            self.radioButtons[i].setText(self.answers[i][2])
+            self.radioButtons[i].setVisible(True)
         if self.quest in self.its_answer:
-            if self.its_answer[self.quest] == 1:
-                self.radioButton_1.setChecked(True)
-            if self.its_answer[self.quest] == 2:
-                self.radioButton_2.setChecked(True)
-            if self.its_answer[self.quest] == 3:
-                self.radioButton_3.setChecked(True)
-            if self.its_answer[self.quest] == 4:
-                self.radioButton_4.setChecked(True)
-            if self.its_answer[self.quest] == 5:
-                self.radioButton_5.setChecked(True)
-
+            self.radioButtons[self.its_answer[self.quest]].setChecked(True)
 
     def pred(self):
         self.quest_num -= 1
-        for btn in [self.radioButton_1, self.radioButton_2, self.radioButton_3, self.radioButton_4, self.radioButton_5]:
-            btn.setAutoExclusive(False)
-            btn.setChecked(False)
-            btn.repaint()
-            btn.setAutoExclusive(True)
-            btn.setVisible(False)
+        self.get_rb()
+        self.hide_rb()
         self.set_quest()
 
     def sled(self):
         self.quest_num += 1
-        for btn in [self.radioButton_1, self.radioButton_2, self.radioButton_3, self.radioButton_4, self.radioButton_5]:
-            btn.setAutoExclusive(False)
-            btn.setChecked(False)
-            btn.repaint()
-            btn.setAutoExclusive(True)
-            btn.setVisible(False)
+        self.get_rb()
+        self.hide_rb()
         self.set_quest()
 
-    def clik_radio(self, x):
-        self.its_answer[self.quest] = x
+    def hide_rb(self):
+        for i in range(self.max_answers):
+            self.radioButtons[i].setAutoExclusive(False)
+            self.radioButtons[i].setChecked(False)
+            self.radioButtons[i].repaint()
+            self.radioButtons[i].setAutoExclusive(True)
+            self.radioButtons[i].setVisible(False)
 
-
-
+    def get_rb(self):
+        for i in range(self.max_answers):
+            if self.radioButtons[i].isChecked():
+                self.its_answer[self.quest] = i
+                break
 
 
 if __name__ == '__main__':
