@@ -56,21 +56,26 @@ class Ui_Tester(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
+
+        self.radioButton_1 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioButton_1.setObjectName("radioButton_1")
+        self.verticalLayout.addWidget(self.radioButton_1)
         self.radioButton_2 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
         self.radioButton_2.setObjectName("radioButton_2")
         self.verticalLayout.addWidget(self.radioButton_2)
+        self.radioButton_3 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioButton_3.setObjectName("radioButton_3")
+        self.verticalLayout.addWidget(self.radioButton_3)
         self.radioButton_4 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
         self.radioButton_4.setObjectName("radioButton_4")
         self.verticalLayout.addWidget(self.radioButton_4)
         self.radioButton_5 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
         self.radioButton_5.setObjectName("radioButton_5")
         self.verticalLayout.addWidget(self.radioButton_5)
-        self.radioButton_3 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        self.radioButton_3.setObjectName("radioButton_3")
-        self.verticalLayout.addWidget(self.radioButton_3)
-        self.radioButton_1 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        self.radioButton_1.setObjectName("radioButton_1")
-        self.verticalLayout.addWidget(self.radioButton_1)
+
+
+
+
         # mainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(mainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 788, 18))

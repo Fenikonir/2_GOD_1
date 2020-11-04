@@ -1,7 +1,9 @@
 import db_test_handler
 import random
 
-a = db_test_handler.get_guests("Финансовая культура")
-print(random.choice(a))
+
+a = {1: 10, 2: 20}
+
+print(a.keys())
 
 
