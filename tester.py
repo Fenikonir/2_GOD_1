@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import db_test_handler
+# import db_test_handler
 
 
 class Ui_Tester(object):
@@ -60,22 +60,6 @@ class Ui_Tester(object):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
 
-        # self.radioButton_1 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        # self.radioButton_1.setObjectName("radioButton_1")
-        # self.verticalLayout.addWidget(self.radioButton_1)
-        # self.radioButton_2 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        # self.radioButton_2.setObjectName("radioButton_2")
-        # self.verticalLayout.addWidget(self.radioButton_2)
-        # self.radioButton_3 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        # self.radioButton_3.setObjectName("radioButton_3")
-        # self.verticalLayout.addWidget(self.radioButton_3)
-        # self.radioButton_4 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        # self.radioButton_4.setObjectName("radioButton_4")
-        # self.verticalLayout.addWidget(self.radioButton_4)
-        # self.radioButton_5 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        # self.radioButton_5.setObjectName("radioButton_5")
-        # self.verticalLayout.addWidget(self.radioButton_5)
-
         self.radioButtons = {}
         for i in range(self.max_answers):
             self.radioButtons[i] = QtWidgets.QRadioButton(self.verticalLayoutWidget)
@@ -106,11 +90,6 @@ class Ui_Tester(object):
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
         mainWindow.setWindowTitle(_translate("mainWindow", "Тестер"))
-        result = db_test_handler.get_tests()
-        for i in range(len(result)):
-            self.comboBox.addItem("")
-            self.comboBox.setItemText(i, _translate("mainWindow", result[i][1]))
-        # self.comboBox.setItemText(1, _translate("mainWindow", "Тест_2"))
         self.label.setText(_translate("mainWindow", "Выберите тест:"))
         self.Vibor.setText(_translate("mainWindow", "Выбрать"))
         self.Predidush.setText(_translate("mainWindow", "Предыдущий вопрос"))
@@ -125,31 +104,7 @@ class Ui_Tester(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">4</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">5</p></body></html>"))
-#         self.radioButton_2.setText(_translate("mainWindow", "RadioButton\n"
-# "1\n"
-# "2\n"
-# "3"))
-#         self.radioButton_4.setText(_translate("mainWindow", "RadioButton\n"
-# "1\n"
-# "2\n"
-# "3"))
-#         self.radioButton_5.setText(_translate("mainWindow", "RadioButton\n"
-# "1\n"
-# "2\n"
-# "3"))
-#         self.radioButton_3.setText(_translate("mainWindow", "RadioButton\n"
-# "1\n"
-# "2\n"
-# "3"))
-#         self.radioButton_1.setText(_translate("mainWindow", "RadioButton\n"
-# "1\n"
-# "2\n"
-# "3"))
-#         self.radioButton_1.setVisible(False)
-#         self.radioButton_2.setVisible(False)
-#         self.radioButton_3.setVisible(False)
-#         self.radioButton_4.setVisible(False)
-#         self.radioButton_5.setVisible(False)
+
         self.QuestLabel.setReadOnly(True)
         self.QuestLabel.setVisible(False)
         self.Predidush.setVisible(False)

@@ -1,9 +1,11 @@
 import sys
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+
 from check_db import *
 from des import *
 from tester import *
+import datetime as dt
+import db_test_handler
 
 
 class Authorization(QtWidgets.QWidget):
@@ -19,6 +21,7 @@ class Authorization(QtWidgets.QWidget):
         self.check_db = ProverThread()
         self.check_db.marginal.connect(self.signal_handler)
 
+
     def prover_input(funct):
         def wrapper(self):
             for line_edit in self.base_line_edit:
@@ -30,13 +33,9 @@ class Authorization(QtWidgets.QWidget):
 
     def close_aus(self):
         global ex_test
-        ex_test = Testered()
+        ex_test = Testered(self.log_auth)
         ex_test.show()
         ex_auth.close()
-
-    # def keyPressEvent(self, event):
-    #     if event.key()==QtCore.Qt.Key_Enter:
-    #         self.auth
 
     def signal_handler(self, value):
         if_log_in = False
@@ -61,9 +60,9 @@ class Authorization(QtWidgets.QWidget):
     @prover_input
     def auth(self):
         name = self.ui.le_login.text()
+        self.log_auth = name
         password = self.ui.le_password.text()
         self.check_db.thr_login(name, password)
-        self.log_auth = name
 
     @prover_input
     def regin(self):
@@ -80,12 +79,22 @@ class Authorization(QtWidgets.QWidget):
 
 
 class Testered(QtWidgets.QWidget, Ui_Tester):
-    def __init__(self, parent=None):
+    def __init__(self, log_auth,  parent=None):
         super(Testered, self).__init__(parent)
+        self.log_auth = log_auth
         self.setupUi(self)
         self.Vibor.clicked.connect(self.start_test)
         self.Sleduch.clicked.connect(self.sled)
         self.Predidush.clicked.connect(self.pred)
+
+        _translate = QtCore.QCoreApplication.translate
+        self.testss = {}
+        result = db_test_handler.get_tests()
+        for i in result:
+            self.testss[i[1]] = i[0]
+        for i in range(len(result)):
+            self.comboBox.addItem("")
+            self.comboBox.setItemText(i, _translate("mainWindow", result[i][1]))
 
     def start_test(self):
         self.quest_num = 0
@@ -96,17 +105,18 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         self.Predidush.setVisible(True)
         self.Sleduch.setVisible(True)
         self.Zaverchit.setVisible(True)
+        self.Zaverchit.clicked.connect(self.get_result)
+        self.test = self.comboBox.currentText()
+        self.questions_and_answers = db_test_handler.get_guests_and_answers(self.test)
         self.set_quest()
 
     def set_quest(self):
         x = self.quest_num
-        test = self.comboBox.currentText()
-
-        questions_and_answers = db_test_handler.get_guests_and_answers(test)
-
-        questions = db_test_handler.get_questions(test)
-        self.quest = questions[x][2]
-        self.QuestLabel.setText(questions[x][2])
+        questions = []
+        for q in self.questions_and_answers:
+            questions.append(q.question)
+        self.quest = questions[x]
+        self.QuestLabel.setText(self.quest)
         if x == 0:
             self.Predidush.setEnabled(False)
         else:
@@ -116,12 +126,15 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         else:
             self.Sleduch.setEnabled(True)
 
-        self.answers = db_test_handler.get_answers(questions[x][2])
-        for i in range(len(self.answers)):
-            self.radioButtons[i].setText(self.answers[i][2])
-            self.radioButtons[i].setVisible(True)
-        if self.quest in self.its_answer:
-            self.radioButtons[self.its_answer[self.quest]].setChecked(True)
+        for q in self.questions_and_answers:
+            if q.question == self.quest:
+                i = -1
+                for a in q.answers:
+                    i += 1
+                    self.radioButtons[i].setText(a.answer)
+                    self.radioButtons[i].setVisible(True)
+                    self.radioButtons[i].setChecked(a.checked)
+                break
 
     def pred(self):
         self.quest_num -= 1
@@ -145,9 +158,51 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
 
     def get_rb(self):
         for i in range(self.max_answers):
-            if self.radioButtons[i].isChecked():
-                self.its_answer[self.quest] = i
+            self.story_Checked(i)
+
+    def get_result(self):
+        self.get_rb()
+        question_correct = 0
+        uncorrect_questions = []
+        for q in self.questions_and_answers:
+            correct = True
+            for a in q.answers:
+                if a.correct != str(a.checked):
+                    correct = False
+                    uncorrect_questions.append(q.questionId)
+                    break
+            if correct:
+                question_correct += 1
+        db_test_handler.uncorrect = uncorrect_questions
+
+        result = "Всего вопросов: " + str(len(self.questions_and_answers)) + "\n"
+        result_1 = "Правильных ответов: " + str(question_correct) + "\n"
+        str(question_correct / len(self.questions_and_answers) * 100)
+
+        infoBox = QtWidgets.QMessageBox()
+        infoBox.setIcon(QtWidgets.QMessageBox.Information)
+        infoBox.setWindowIcon(QtGui.QIcon("infoBox.png"))
+        infoBox.setText("\n" + result + result_1)
+        infoBox.setWindowTitle("Результат")
+        infoBox.setEscapeButton(QtWidgets.QMessageBox.Close)
+        infoBox.exec_()
+        db_test_handler.write_result(self.test, self.log_auth, dt.datetime.now(),
+                                     len(self.questions_and_answers), question_correct)
+        self.restart()
+
+    def story_Checked(self, i):
+        for q in self.questions_and_answers:
+            if q.question == self.quest:
+                for a in q.answers:
+                    if a.answer == self.radioButtons[i].text():
+                        a.checked = self.radioButtons[i].isChecked()
                 break
+
+    def restart(self):
+        global ex_test
+        ex_test.close()
+        ex_test = Testered(self.log_auth)
+        ex_test.show()
 
 
 if __name__ == '__main__':
