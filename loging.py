@@ -173,7 +173,7 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
             for a in q.answers:
                 if a.correct != str(a.checked):
                     correct = False
-                    uncorrect_questions.append(q.questionId)
+                    uncorrect_questions.append(q.question_id)
                     break
             if correct:
                 question_correct += 1
