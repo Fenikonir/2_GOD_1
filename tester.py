@@ -61,7 +61,7 @@ class Ui_Tester(object):
         self.verticalLayout.setObjectName("verticalLayout")
 
         self.Add_test = QtWidgets.QPushButton(self.centralwidget)
-        self.Add_test.setGeometry(QtCore.QRect(680, 20, 91, 21))
+        self.Add_test.setGeometry(QtCore.QRect(630, 20, 130, 21))
         self.Add_test.setObjectName("Add_test")
 
         self.radioButtons = {}

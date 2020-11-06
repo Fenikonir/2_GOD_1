@@ -104,6 +104,7 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         self.its_answer = {}
         self.comboBox.setEnabled(False)
         self.Vibor.setEnabled(False)
+        self.Add_test.setEnabled(False)
         self.QuestLabel.setVisible(True)
         self.Predidush.setVisible(True)
         self.Sleduch.setVisible(True)
@@ -181,6 +182,8 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         result = "Всего вопросов: " + str(len(self.questions_and_answers)) + "\n"
         result_1 = "Правильных ответов: " + str(question_correct) + "\n"
         str(question_correct / len(self.questions_and_answers) * 100)
+        db_test_handler.write_result(self.test, self.log_auth, dt.datetime.now(),
+                                     len(self.questions_and_answers), question_correct)
 
         infoBox = QtWidgets.QMessageBox()
         infoBox.setIcon(QtWidgets.QMessageBox.Information)
@@ -189,8 +192,6 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         infoBox.setWindowTitle("Результат")
         infoBox.setEscapeButton(QtWidgets.QMessageBox.Close)
         infoBox.exec_()
-        db_test_handler.write_result(self.test, self.log_auth, dt.datetime.now(),
-                                     len(self.questions_and_answers), question_correct)
         self.restart()
 
     def story_Checked(self, i):
