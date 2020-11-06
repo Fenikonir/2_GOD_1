@@ -5,7 +5,7 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Авторизация")
         Form.resize(218, 139)
-        Form.setWindowIcon(QtGui.QIcon("login.png"))
+        Form.setWindowIcon(QtGui.QIcon("handler/login.png"))
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()

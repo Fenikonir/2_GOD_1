@@ -18,7 +18,7 @@ class Redactor(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(575, 583)
-        Form.setWindowIcon(QtGui.QIcon("tester.png"))
+        Form.setWindowIcon(QtGui.QIcon("handler/tester.png"))
         Form.setWindowModality(QtCore.Qt.NonModal)
         self.lineEdit = QtWidgets.QLineEdit(Form)
         self.lineEdit.setGeometry(QtCore.QRect(20, 40, 531, 20))

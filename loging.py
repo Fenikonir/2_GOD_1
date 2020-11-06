@@ -39,7 +39,7 @@ class Authorization(QtWidgets.QWidget):
     def signal_handler(self, value):
         if_log_in = False
         infoBox = QtWidgets.QMessageBox()  ##Message Box that doesn't run
-        infoBox.setWindowIcon(QtGui.QIcon("infoBox.png"))
+        infoBox.setWindowIcon(QtGui.QIcon("handler/infoBox.png"))
         if value == "Неверный логин или пароль!":
             infoBox.setIcon(QtWidgets.QMessageBox.Critical)
         elif value == "Авторизация прошла успешно!":
@@ -187,7 +187,7 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
 
         infoBox = QtWidgets.QMessageBox()
         infoBox.setIcon(QtWidgets.QMessageBox.Information)
-        infoBox.setWindowIcon(QtGui.QIcon("infoBox.png"))
+        infoBox.setWindowIcon(QtGui.QIcon("handler/infoBox.png"))
         infoBox.setText("\n" + result + result_1)
         infoBox.setWindowTitle("Результат")
         infoBox.setEscapeButton(QtWidgets.QMessageBox.Close)
@@ -280,7 +280,7 @@ class Redactor(QtWidgets.QWidget, redactor.Redactor):
 
     def signal_handler(self, valvs):
         infoBox = QtWidgets.QMessageBox()  ##Message Box that doesn't run
-        infoBox.setWindowIcon(QtGui.QIcon("infoBox.png"))
+        infoBox.setWindowIcon(QtGui.QIcon("handler/infoBox.png"))
         if not valvs:
             infoBox.setIcon(QtWidgets.QMessageBox.Warning)
             infoBox.setText("\n" + "Такой вопрос уже есть")

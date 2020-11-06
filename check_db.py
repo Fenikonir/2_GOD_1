@@ -1,6 +1,5 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from handler.db_handler import *
-import db_test_handler
+from PyQt5 import QtCore
+from db_handler import *
 
 
 class ProverThread(QtCore.QThread):

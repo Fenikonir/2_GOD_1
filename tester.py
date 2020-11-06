@@ -18,7 +18,7 @@ class Ui_Tester(object):
 
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.setWindowIcon(QtGui.QIcon("tester.png"))
+        mainWindow.setWindowIcon(QtGui.QIcon("handler/tester.png"))
         mainWindow.setWindowModality(QtCore.Qt.NonModal)
         mainWindow.resize(788, 589)
         mainWindow.setMinimumSize(QtCore.QSize(788, 589))
