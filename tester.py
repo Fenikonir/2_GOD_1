@@ -60,6 +60,10 @@ class Ui_Tester(object):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
 
+        self.Add_test = QtWidgets.QPushButton(self.centralwidget)
+        self.Add_test.setGeometry(QtCore.QRect(680, 20, 91, 21))
+        self.Add_test.setObjectName("Add_test")
+
         self.radioButtons = {}
         for i in range(self.max_answers):
             self.radioButtons[i] = QtWidgets.QRadioButton(self.verticalLayoutWidget)
@@ -91,6 +95,7 @@ class Ui_Tester(object):
         _translate = QtCore.QCoreApplication.translate
         mainWindow.setWindowTitle(_translate("mainWindow", "Тестер"))
         self.label.setText(_translate("mainWindow", "Выберите тест:"))
+        self.Add_test.setText(_translate("mainWindow", "Редактировать тест"))
         self.Vibor.setText(_translate("mainWindow", "Выбрать"))
         self.Predidush.setText(_translate("mainWindow", "Предыдущий вопрос"))
         self.Sleduch.setText(_translate("mainWindow", "Следующий вопрос"))
@@ -110,3 +115,4 @@ class Ui_Tester(object):
         self.Predidush.setVisible(False)
         self.Sleduch.setVisible(False)
         self.Zaverchit.setVisible(False)
+        self.Add_test.setVisible(False)

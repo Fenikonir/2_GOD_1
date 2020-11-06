@@ -31,6 +31,15 @@ def register(login, password, signal):
         signal.emit("Пользователь зарегестрирован")
         con.commit()
 
-
     cur.close()
     con.commit()
+
+
+def admin_root(user):
+    con = sqlite3.connect("handler/users.db")
+    cur = con.cursor()
+
+    result = cur.execute("""SELECT admin_root FROM Users WHERE login=?""", (user,)).fetchall()
+    cur.close()
+    con.commit()
+    return result[0][0]

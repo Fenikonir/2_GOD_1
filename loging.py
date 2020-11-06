@@ -1,11 +1,11 @@
 import sys
 
-
 from check_db import *
 from des import *
 from tester import *
 import datetime as dt
 import db_test_handler
+import redactor
 
 
 class Authorization(QtWidgets.QWidget):
@@ -20,7 +20,6 @@ class Authorization(QtWidgets.QWidget):
 
         self.check_db = ProverThread()
         self.check_db.marginal.connect(self.signal_handler)
-
 
     def prover_input(funct):
         def wrapper(self):
@@ -79,13 +78,17 @@ class Authorization(QtWidgets.QWidget):
 
 
 class Testered(QtWidgets.QWidget, Ui_Tester):
-    def __init__(self, log_auth,  parent=None):
+    def __init__(self, log_auth, parent=None):
         super(Testered, self).__init__(parent)
         self.log_auth = log_auth
         self.setupUi(self)
         self.Vibor.clicked.connect(self.start_test)
         self.Sleduch.clicked.connect(self.sled)
         self.Predidush.clicked.connect(self.pred)
+        self.admin_rooted = admin_root(self.log_auth)
+        if self.admin_rooted == "admin":
+            self.Add_test.setVisible(True)
+            self.Add_test.clicked.connect(self.add_test)
 
         _translate = QtCore.QCoreApplication.translate
         self.testss = {}
@@ -203,6 +206,89 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         ex_test.close()
         ex_test = Testered(self.log_auth)
         ex_test.show()
+
+    def add_test(self):
+        global red
+        red = Redactor()
+        red.show()
+
+
+class Redactor(QtWidgets.QWidget, redactor.Redactor):
+    def __init__(self, parent=None):
+        super(Redactor, self).__init__(parent)
+        self.redactor_question = False
+        self.setupUi(self)
+        self.pushButton_3.clicked.connect(self.add_quest)
+
+    def add_quest(self):
+        test = self.lineEdit.text()
+        question = self.lineEdit_2.text()
+        check_test = self.check_test(test)
+        a = self.check_quest(test, question)
+        if a or self.redactor_question:
+            answers = {}
+            for i in range(5):
+                if self.answers_line_edit[i].text() != "":
+                    isCheked = self.answers_check_box[i].isChecked()
+                    if isCheked:
+                        isCheked = "True"
+                    else:
+                        isCheked = "False"
+                    answers[i] = [self.answers_line_edit[i].text(), isCheked]
+            if a:
+                db_test_handler.write_quest(test, check_test, question, answers)
+            if not a:
+                db_test_handler.update_quest(test, check_test, question, answers)
+            self.redactor_question = False
+            self.signal_handler(True)
+            self.lineEdit_2.clear()
+            for i in range(5):
+                self.answers_line_edit[i].clear()
+                self.answers_check_box[i].setChecked(False)
+        elif not a:
+            self.signal_handler(False)
+            for i in range(len(self.quested)):
+                if self.quested[i].question == question:
+                    x = 0
+                    for j in self.quested[i].answers:
+                        self.answers_line_edit[x].setText(j.answer)
+                        if j.correct == "True":
+                            self.answers_check_box[x].setChecked(True)
+                        x += 1
+                    self.redactor_question = True
+                    break
+
+    def check_test(self, test):
+        tests = []
+        for i in db_test_handler.get_tests():
+            tests.append(i[1])
+        if test in tests:
+            return True
+        else:
+            return False
+
+    def check_quest(self, test, quest):
+        quests = []
+        self.quested = db_test_handler.get_guests_and_answers(test)
+        for q in self.quested:
+            quests.append(q.question)
+        if quest in quests:
+            return False
+        else:
+            return True
+
+    def signal_handler(self, valvs):
+        infoBox = QtWidgets.QMessageBox()  ##Message Box that doesn't run
+        infoBox.setWindowIcon(QtGui.QIcon("infoBox.png"))
+        if not valvs:
+            infoBox.setIcon(QtWidgets.QMessageBox.Warning)
+            infoBox.setText("\n" + "Такой вопрос уже есть")
+        else:
+            infoBox.setIcon(QtWidgets.QMessageBox.Information)
+            infoBox.setText("\n" + "Тест изменен")
+        infoBox.setWindowTitle("Оповещение")
+        infoBox.setEscapeButton(QtWidgets.QMessageBox.Close)
+        infoBox.exec_()
 
 
 if __name__ == '__main__':

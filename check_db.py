@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from handler.db_handler import *
+import db_test_handler
 
 
 class ProverThread(QtCore.QThread):
@@ -10,3 +11,4 @@ class ProverThread(QtCore.QThread):
 
     def thr_register(self, name, passw):
         register(name, passw, self.marginal)
+

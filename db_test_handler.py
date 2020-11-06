@@ -5,6 +5,7 @@ import loging
 # Добавление, Проверка и Авторизация
 uncorrect = []
 
+
 def get_tests():
     con = sqlite3.connect("handler/tests.db")
     cur = con.cursor()
@@ -14,40 +15,67 @@ def get_tests():
     return result
 
 
-def get_guests_and_answers(quest):
+def get_guests_and_answers(test):
     con = sqlite3.connect("handler/tests.db")
     cur = con.cursor()
     result = cur.execute("""SELECT t.id, q.id, q.question, a.answer, a.correct FROM tests t 
     left join questions q on q.test = t.id 
     left join answers a on a.question = q.id 
     WHERE t.name = ? 
-        order by q.question, a.answer""", (quest,)).fetchall()
+        order by q.question, a.answer""", (test,)).fetchall()
 
-    testId = result[0][0]
-    questionId = 0
-    questionGroup = ""
+    test_id = result[0][0]
+    question_id = 0
+    question_group = ""
     questionsList = []
     answersList = []
     count_correct_answers = 0
     for r in result:
-        if (questionGroup != r[2]):
-            if questionGroup != "":
+        if (question_group != r[2]):
+            if question_group != "":
                 random.shuffle(answersList)
-                questionsList.append(Question(testId, questionId, questionGroup, count_correct_answers, answersList))
+                questionsList.append(Question(test_id, question_id, question_group, count_correct_answers, answersList))
                 answersList = []
                 count_correct_answers = 0
-            questionId = r[1]
-            questionGroup = r[2]
+            question_id = r[1]
+            question_group = r[2]
         answersList.append(Answer(r[3], r[4], False))
         if r[4] == "True":
             count_correct_answers += 1
 
-    if (questionGroup != ""):
-        questionsList.append(Question(testId, questionId, questionGroup, count_correct_answers, answersList))
+    if (question_group != ""):
+        questionsList.append(Question(test_id, question_id, question_group, count_correct_answers, answersList))
 
     cur.close()
     con.close()
     return questionsList
+
+
+def write_quest(test, check_test, question, answers):
+    con = sqlite3.connect("handler/tests.db")
+    cur = con.cursor()
+    if not check_test:
+        cur.execute("""INSERT INTO Tests(name) VALUES(?)""", (test,))
+    test_id = cur.execute("""SELECT id FROM tests WHERE name=?""", (test,)).fetchall()[0][0]
+    cur.execute("""INSERT INTO questions(test, question) VALUES(?, ?)""", (test_id, question))
+    question_id = cur.execute("""SELECT id FROM questions WHERE question=?""", (question,)).fetchall()[0][0]
+    for i in range(len(answers)):
+        cur.execute("""INSERT INTO answers(question, answer, correct) VALUES(?, ?, ?)""",
+                    (question_id, answers[i][0], answers[i][1]))
+    cur.close()
+    con.commit()
+
+
+def update_quest(test, check_test, question, answers):
+    con = sqlite3.connect("handler/tests.db")
+    cur = con.cursor()
+    question_id = cur.execute("""SELECT id FROM questions WHERE question=?""", (question,)).fetchall()[0][0]
+    cur.execute("""DELETE from answers WHERE question=?""", (question_id,))
+    for i in range(len(answers)):
+        cur.execute("""INSERT INTO answers(question, answer, correct) VALUES(?, ?, ?)""",
+                    (question_id, answers[i][0], answers[i][1]))
+    cur.close()
+    con.commit()
 
 
 def write_result(test, user, date_time, all_quests, correct_quests):
@@ -72,17 +100,16 @@ class Answer:
 
 
 class Question:
-    def __init__(self, test, questionId, question, count_correct_answers, answers):
+    def __init__(self, test, question_id, question, count_correct_answers, answers):
         self.test = test
-        self.questionId = questionId
+        self.question_id = question_id
         self.question = question
         self.count_correct_answers = count_correct_answers
         self.answers = answers
 
-
-# quest_and_answer = get_guests_and_answers("Финансовая культура")
-# for q in quest_and_answer:
-#     print("==============================================")
-#     print(q.question, q.questionId, len(q.answers))
-#     for a in q.answers:
-#         print(a.answer, a.correct, a.checked)
+    # quest_and_answer = get_guests_and_answers("Финансовая культура")
+    # for q in quest_and_answer:
+    #     print("==============================================")
+    #     print(q.question, q.questionId, len(q.answers))
+    #     for a in q.answers:
+    #         print(a.answer, a.correct, a.checked)
