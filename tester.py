@@ -63,7 +63,7 @@ class Ui_Tester(object):
         self.Add_test = QtWidgets.QPushButton(self.centralwidget)
         self.Add_test.setGeometry(QtCore.QRect(630, 20, 130, 21))
         self.Add_test.setObjectName("Add_test")
-
+        self.checkBoxs = {}
         self.radioButtons = {}
         for i in range(self.max_answers):
             self.radioButtons[i] = QtWidgets.QRadioButton(self.verticalLayoutWidget)
@@ -76,6 +76,11 @@ class Ui_Tester(object):
                                                                 "2\n"
                                                                 "3"))
             self.radioButtons[i].setVisible(False)
+            self.checkBoxs[i] = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+            self.checkBoxs[i].setObjectName("checkButton" + str(i))
+            self.verticalLayout.addWidget(self.checkBoxs[i])
+            self.checkBoxs[i].setText("CB" + str(i))
+            self.checkBoxs[i].setVisible(False)
 
 
 

@@ -130,15 +130,32 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         else:
             self.Sleduch.setEnabled(True)
 
+        self.correct_answers = 0
         for q in self.questions_and_answers:
             if q.question == self.quest:
-                i = -1
                 for a in q.answers:
-                    i += 1
-                    self.radioButtons[i].setText(a.answer)
-                    self.radioButtons[i].setVisible(True)
-                    self.radioButtons[i].setChecked(a.checked)
-                break
+                    if a.correct == "True":
+                        self.correct_answers += 1
+        if self.correct_answers == 1:
+            for q in self.questions_and_answers:
+                if q.question == self.quest:
+                    i = -1
+                    for a in q.answers:
+                        i += 1
+                        self.radioButtons[i].setText(a.answer)
+                        self.radioButtons[i].setVisible(True)
+                        self.radioButtons[i].setChecked(a.checked)
+                    break
+        else:
+            for q in self.questions_and_answers:
+                if q.question == self.quest:
+                    i = -1
+                    for a in q.answers:
+                        i += 1
+                        self.checkBoxs[i].setText(a.answer)
+                        self.checkBoxs[i].setVisible(True)
+                        self.checkBoxs[i].setChecked(a.checked)
+                    break
 
     def pred(self):
         self.quest_num -= 1
@@ -159,6 +176,9 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
             self.radioButtons[i].repaint()
             self.radioButtons[i].setAutoExclusive(True)
             self.radioButtons[i].setVisible(False)
+            self.checkBoxs[i].setChecked(False)
+            self.checkBoxs[i].setVisible(False)
+            self.checkBoxs[i].repaint()
 
     def get_rb(self):
         for i in range(self.max_answers):
@@ -195,12 +215,20 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         self.restart()
 
     def story_Checked(self, i):
-        for q in self.questions_and_answers:
-            if q.question == self.quest:
-                for a in q.answers:
-                    if a.answer == self.radioButtons[i].text():
-                        a.checked = self.radioButtons[i].isChecked()
-                break
+        if self.correct_answers == 1:
+            for q in self.questions_and_answers:
+                if q.question == self.quest:
+                    for a in q.answers:
+                        if a.answer == self.radioButtons[i].text():
+                            a.checked = self.radioButtons[i].isChecked()
+                    break
+        else:
+            for q in self.questions_and_answers:
+                if q.question == self.quest:
+                    for a in q.answers:
+                        if a.answer == self.checkBoxs[i].text():
+                            a.checked = self.checkBoxs[i].isChecked()
+                    break
 
     def restart(self):
         global ex_test
@@ -225,7 +253,10 @@ class Redactor(QtWidgets.QWidget, redactor.Redactor):
         test = self.lineEdit.text()
         question = self.lineEdit_2.text()
         check_test = self.check_test(test)
-        a = self.check_quest(test, question)
+        if check_test:
+            a = self.check_quest(test, question)
+        else:
+            a = True
         if a or self.redactor_question:
             answers = {}
             for i in range(5):
@@ -257,7 +288,7 @@ class Redactor(QtWidgets.QWidget, redactor.Redactor):
                             self.answers_check_box[x].setChecked(True)
                         x += 1
                     self.redactor_question = True
-                    break
+                    # break
 
     def check_test(self, test):
         tests = []
