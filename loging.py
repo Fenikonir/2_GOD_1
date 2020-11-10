@@ -252,43 +252,49 @@ class Redactor(QtWidgets.QWidget, redactor.Redactor):
     def add_quest(self):
         test = self.lineEdit.text()
         question = self.lineEdit_2.text()
+        if len(test) == 0 or len(question) == 0:
+            self.signal_handler("Error")
+            retry = False
+        else:
+            retry = True
         check_test = self.check_test(test)
         if check_test:
             a = self.check_quest(test, question)
         else:
             a = True
-        if a or self.redactor_question:
-            answers = {}
-            for i in range(5):
-                if self.answers_line_edit[i].text() != "":
-                    isCheked = self.answers_check_box[i].isChecked()
-                    if isCheked:
-                        isCheked = "True"
-                    else:
-                        isCheked = "False"
-                    answers[i] = [self.answers_line_edit[i].text(), isCheked]
-            if a:
-                db_test_handler.write_quest(test, check_test, question, answers)
-            if not a:
-                db_test_handler.update_quest(test, check_test, question, answers)
-            self.redactor_question = False
-            self.signal_handler(True)
-            self.lineEdit_2.clear()
-            for i in range(5):
-                self.answers_line_edit[i].clear()
-                self.answers_check_box[i].setChecked(False)
-        elif not a:
-            self.signal_handler(False)
-            for i in range(len(self.quested)):
-                if self.quested[i].question == question:
-                    x = 0
-                    for j in self.quested[i].answers:
-                        self.answers_line_edit[x].setText(j.answer)
-                        if j.correct == "True":
-                            self.answers_check_box[x].setChecked(True)
-                        x += 1
-                    self.redactor_question = True
-                    # break
+        if retry:
+            if a or self.redactor_question:
+                answers = {}
+                for i in range(5):
+                    if self.answers_line_edit[i].text() != "":
+                        isCheked = self.answers_check_box[i].isChecked()
+                        if isCheked:
+                            isCheked = "True"
+                        else:
+                            isCheked = "False"
+                        answers[i] = [self.answers_line_edit[i].text(), isCheked]
+                if a:
+                    db_test_handler.write_quest(test, check_test, question, answers)
+                if not a:
+                    db_test_handler.update_quest(test, check_test, question, answers)
+                self.redactor_question = False
+                self.signal_handler(True)
+                self.lineEdit_2.clear()
+                for i in range(5):
+                    self.answers_line_edit[i].clear()
+                    self.answers_check_box[i].setChecked(False)
+            elif not a:
+                self.signal_handler(False)
+                for i in range(len(self.quested)):
+                    if self.quested[i].question == question:
+                        x = 0
+                        for j in self.quested[i].answers:
+                            self.answers_line_edit[x].setText(j.answer)
+                            if j.correct == "True":
+                                self.answers_check_box[x].setChecked(True)
+                            x += 1
+                        self.redactor_question = True
+                        # break
 
     def check_test(self, test):
         tests = []
@@ -310,17 +316,23 @@ class Redactor(QtWidgets.QWidget, redactor.Redactor):
             return True
 
     def signal_handler(self, valvs):
+        close = False
         infoBox = QtWidgets.QMessageBox()  ##Message Box that doesn't run
         infoBox.setWindowIcon(QtGui.QIcon("handler/infoBox.png"))
-        if not valvs:
+        if valvs == "Error":
+            infoBox.setIcon(QtWidgets.QMessageBox.Critical)
+            infoBox.setText("\n" + "Неправильный ввод данных")
+            close = True
+        elif not valvs:
             infoBox.setIcon(QtWidgets.QMessageBox.Warning)
             infoBox.setText("\n" + "Такой вопрос уже есть")
-        else:
+        elif valvs:
             infoBox.setIcon(QtWidgets.QMessageBox.Information)
             infoBox.setText("\n" + "Тест изменен")
         infoBox.setWindowTitle("Оповещение")
         infoBox.setEscapeButton(QtWidgets.QMessageBox.Close)
         infoBox.exec_()
+
 
 
 if __name__ == '__main__':
