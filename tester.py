@@ -53,6 +53,7 @@ class Ui_Tester(object):
         self.QuestLabel = QtWidgets.QTextBrowser(self.centralwidget)
         self.QuestLabel.setGeometry(QtCore.QRect(20, 90, 751, 61))
         self.QuestLabel.setObjectName("QuestLabel")
+        self.QuestLabel.setStyleSheet("font: 12pt")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 159, 751, 321))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -75,12 +76,14 @@ class Ui_Tester(object):
                                                                 "1\n"
                                                                 "2\n"
                                                                 "3"))
+            self.radioButtons[i].setStyleSheet("font: 10pt")
             self.radioButtons[i].setVisible(False)
             self.checkBoxs[i] = QtWidgets.QCheckBox(self.verticalLayoutWidget)
             self.checkBoxs[i].setObjectName("checkButton" + str(i))
             self.verticalLayout.addWidget(self.checkBoxs[i])
             self.checkBoxs[i].setText("CB" + str(i))
             self.checkBoxs[i].setVisible(False)
+            self.checkBoxs[i].setStyleSheet("font: 10pt")
 
 
 
