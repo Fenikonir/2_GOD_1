@@ -9,6 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+
 # import db_test_handler
 
 
@@ -26,17 +28,18 @@ class Ui_Tester(object):
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox.setGeometry(QtCore.QRect(20, 60, 651, 20))
+        self.comboBox.setGeometry(QtCore.QRect(20, 60, 651, 30))
+        self.comboBox.setStyleSheet("font: 10pt")
         self.comboBox.setObjectName("comboBox")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(20, 20, 441, 20))
         self.label.setStyleSheet("font: 14pt \"Vijaya\";")
         self.label.setObjectName("label")
         self.Vibor = QtWidgets.QPushButton(self.centralwidget)
-        self.Vibor.setGeometry(QtCore.QRect(680, 60, 91, 21))
+        self.Vibor.setGeometry(QtCore.QRect(680, 60, 91, 30))
         self.Vibor.setObjectName("pushButton")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 500, 751, 51))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 510, 751, 61))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -73,9 +76,9 @@ class Ui_Tester(object):
             self.radioButtons[i].setText("RB" + str(i))
             _translate = QtCore.QCoreApplication.translate
             self.radioButtons[i].setText(_translate("mainWindow", "RadioButton\n"
-                                                                "1\n"
-                                                                "2\n"
-                                                                "3"))
+                                                                  "1\n"
+                                                                  "2\n"
+                                                                  "3"))
             self.radioButtons[i].setStyleSheet("font: 10pt")
             self.radioButtons[i].setVisible(False)
             self.checkBoxs[i] = QtWidgets.QCheckBox(self.verticalLayoutWidget)
@@ -84,8 +87,6 @@ class Ui_Tester(object):
             self.checkBoxs[i].setText("CB" + str(i))
             self.checkBoxs[i].setVisible(False)
             self.checkBoxs[i].setStyleSheet("font: 10pt")
-
-
 
         # mainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(mainWindow)
@@ -108,19 +109,24 @@ class Ui_Tester(object):
         self.Predidush.setText(_translate("mainWindow", "Предыдущий вопрос"))
         self.Sleduch.setText(_translate("mainWindow", "Следующий вопрос"))
         self.Zaverchit.setText(_translate("mainWindow", "Завершить"))
-        self.QuestLabel.setHtml(_translate("mainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Вопрос</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">4</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">5</p></body></html>"))
+        self.QuestLabel.setHtml(_translate("mainWindow",
+                                           "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                           "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                           "p, li { white-space: pre-wrap; }\n"
+                                           "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                                           "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Вопрос</p>\n"
+                                           "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2</p>\n"
+                                           "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3</p>\n"
+                                           "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">4</p>\n"
+                                           "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">5</p></body></html>"))
 
         self.QuestLabel.setReadOnly(True)
         self.QuestLabel.setVisible(False)
         self.Predidush.setVisible(False)
+        self.Predidush.setStyleSheet("font: 10pt")
         self.Sleduch.setVisible(False)
+        self.Sleduch.setStyleSheet("font: 10pt")
         self.Zaverchit.setVisible(False)
+        self.Zaverchit.setStyleSheet("font: 10pt")
         self.Add_test.setVisible(False)
+        self.Add_test.setStyleSheet("font: 10pt")

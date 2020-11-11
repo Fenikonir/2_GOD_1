@@ -61,13 +61,15 @@ class Authorization(QtWidgets.QWidget):
         name = self.ui.le_login.text()
         self.log_auth = name
         password = self.ui.le_password.text()
-        self.check_db.thr_login(name, password)
+        a = "".join([str(ord(i)) for i in list(password)])
+        self.check_db.thr_login(name, a)
 
     @prover_input
     def regin(self):
         name = self.ui.le_login.text()
         password = self.ui.le_password.text()
-        self.check_db.thr_register(name, password)
+        a = "".join([str(ord(i)) for i in list(password)])
+        self.check_db.thr_register(name, a)
 
     def user_info(self):
         con = sqlite3.connect("handler/users.db")
