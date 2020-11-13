@@ -66,5 +66,5 @@ class Redactor(object):
         self.label.setText(_translate("Form", "Название теста:"))
         self.label_2.setText(_translate("Form", "Вопрос"))
         self.pushButton_3.setText(_translate("Form", "Сохранить"))
-        self.lineEdit_2.setPlaceholderText(_translate("Form", "Введите вопрос"))
+        self.lineEdit_2.setPlaceholderText(_translate("Form", "Введите вопрос или имя изображения в папке Photo"))
         self.lineEdit.setPlaceholderText(_translate("Form", "Введите имя теста"))

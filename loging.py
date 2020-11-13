@@ -111,6 +111,7 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         self.Predidush.setVisible(True)
         self.Sleduch.setVisible(True)
         self.Zaverchit.setVisible(True)
+        self.QuestLabel.setVisible(False)
         self.Zaverchit.clicked.connect(self.get_result)
         self.test = self.comboBox.currentText()
         self.questions_and_answers = db_test_handler.get_guests_and_answers(self.test)
@@ -118,11 +119,22 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
 
     def set_quest(self):
         x = self.quest_num
+        self.str_num.setVisible(True)
+        self.str_num.setText(f"Вопрос {x + 1} из {len(self.questions_and_answers)}")
         questions = []
         for q in self.questions_and_answers:
             questions.append(q.question)
         self.quest = questions[x]
-        self.QuestLabel.setText(self.quest)
+        if ".jpg" in self.quest or ".png" in self.quest:
+            self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 420, 751, 190))
+            self.PhotoLabel.setVisible(True)
+            photo = "Photo//"[:-1] + self.quest
+            pixmap = QtGui.QPixmap(photo)
+            self.PhotoLabel.setPixmap(pixmap)
+        else:
+            self.QuestLabel.setVisible(True)
+            self.QuestLabel.setText(self.quest)
+            self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 280, 751, 280))
         if x == 0:
             self.Predidush.setEnabled(False)
         else:
@@ -181,6 +193,8 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
             self.checkBoxs[i].setChecked(False)
             self.checkBoxs[i].setVisible(False)
             self.checkBoxs[i].repaint()
+            self.QuestLabel.setVisible(False)
+            self.PhotoLabel.setVisible(False)
 
     def get_rb(self):
         for i in range(self.max_answers):
@@ -211,7 +225,10 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         infoBox.setIcon(QtWidgets.QMessageBox.Information)
         infoBox.setWindowIcon(QtGui.QIcon("handler/infoBox.png"))
         infoBox.setText("\n" + result + result_1)
-        infoBox.setWindowTitle("Результат")
+        if str(question_correct) == str(len(self.questions_and_answers)):
+            infoBox.setWindowTitle("Поздравляю!")
+        else:
+            infoBox.setWindowTitle("Результат")
         infoBox.setEscapeButton(QtWidgets.QMessageBox.Close)
         infoBox.exec_()
         self.restart()
