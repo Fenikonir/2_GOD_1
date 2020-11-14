@@ -125,10 +125,10 @@ class Testered(QtWidgets.QWidget, Ui_Tester):
         for q in self.questions_and_answers:
             questions.append(q.question)
         self.quest = questions[x]
-        if ".jpg" in self.quest or ".png" in self.quest:
+        if ".jpg" in self.quest or ".png" in self.quest or ".jpeg" in self.quest:
             self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 420, 751, 190))
             self.PhotoLabel.setVisible(True)
-            photo = "Photo//"[:-1] + self.quest
+            photo = self.quest
             pixmap = QtGui.QPixmap(photo)
             self.PhotoLabel.setPixmap(pixmap)
         else:
@@ -267,10 +267,18 @@ class Redactor(QtWidgets.QWidget, redactor.Redactor):
         self.redactor_question = False
         self.setupUi(self)
         self.pushButton_3.clicked.connect(self.add_quest)
+        _translate = QtCore.QCoreApplication.translate
+        result = db_test_handler.get_tests()
+        for i in range(len(result)):
+            self.lineEdit.addItem("")
+            self.lineEdit.setItemText(i, _translate("mainWindow", result[i][1]))
+        self.lineEdit.activated[str].connect(self.onActivated)
+        self.lineEdit_2.activated[str].connect(self.onActivated_Q)
+        self.upload_image.clicked.connect(self.get_image_file)
 
     def add_quest(self):
-        test = self.lineEdit.text()
-        question = self.lineEdit_2.text()
+        test = self.lineEdit.currentText()
+        question = self.lineEdit_2.currentText()
         if len(test) == 0 or len(question) == 0:
             self.signal_handler("Error")
             retry = False
@@ -315,6 +323,12 @@ class Redactor(QtWidgets.QWidget, redactor.Redactor):
                         self.redactor_question = True
                         # break
 
+    def get_image_file(self):
+        file_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open Image File', r"<Default dir>",
+                                                   "Image files (*.jpg *.jpeg *.gif *.png)")
+        # file_name = str(file_name.split("/")[-1])
+        self.lineEdit_2.setCurrentText(file_name)
+
     def check_test(self, test):
         tests = []
         for i in db_test_handler.get_tests():
@@ -352,6 +366,28 @@ class Redactor(QtWidgets.QWidget, redactor.Redactor):
         infoBox.setEscapeButton(QtWidgets.QMessageBox.Close)
         infoBox.exec_()
 
+    def onActivated(self, text):
+        self.quest_and_answer = db_test_handler.get_guests_and_answers(text)
+        question = [i.question for i in db_test_handler.get_guests_and_answers(text)]
+        _translate = QtCore.QCoreApplication.translate
+        for i in range(len(question)):
+            self.lineEdit_2.addItem("")
+            self.lineEdit_2.setItemText(i, _translate("mainWindow", question[i]))
+
+    def onActivated_Q(self, text):
+        for i in range(5):
+            self.answers_line_edit[i].clear()
+            self.answers_check_box[i].setChecked(False)
+        for i in self.quest_and_answer:
+            if i.question == text:
+                x = 0
+                for j in i.answers:
+
+                    self.answers_line_edit[x].setText(j.answer)
+                    if j.correct == "True":
+                        self.answers_check_box[x].setChecked(True)
+                    x += 1
+                self.redactor_question = True
 
 
 if __name__ == '__main__':
